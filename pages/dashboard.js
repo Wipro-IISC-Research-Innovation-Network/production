@@ -1,23 +1,10 @@
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import MainContent from "../components/MainContent2";
 import Head from "next/head";
 
-export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    // Redirect to /mode after 5 seconds (for example)
-    const timer = setTimeout(() => {
-      router.push("/profile");
-    }, 7000);
-
-    // Clean up the timer if the component unmounts
-    return () => clearTimeout(timer);
-  }, [router]);
-
+export default function Dashboard() {
   return (
     <>
       <Head>

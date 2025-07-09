@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from "react";
 
 const Speedometer = () => {
-  const [selectedGear, setSelectedGear] = useState("D");
+  const [selectedGear, setSelectedGear] = useState("P");
   const [speed, setSpeed] = useState(0);
   const [power, setPower] = useState(0);
 
   const gears = ["P", "R", "N", "D", "A"];
 
+  // initial fetch of mode
+  useEffect(() => {
+    fetch('/api/driving_mode')
+      .then(res=>res.json())
+      .then(data=> setSelectedGear(data.mode))
+      .catch(()=>{});
+  }, []);
+
+  const updateMode = async (mode:string)=>{
+    try {await fetch('/api/driving_mode',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode})});}catch{}
+  };
+
   const handleGearClick = (gear: string) => {
     setSelectedGear(gear);
+    updateMode(gear);
   };
 
   const handleArrowClick = (direction: string) => {
@@ -22,6 +35,7 @@ const Speedometer = () => {
     }
 
     setSelectedGear(gears[newIndex]);
+    updateMode(gears[newIndex]);
   };
 
   // Fetch both speed and power from the API

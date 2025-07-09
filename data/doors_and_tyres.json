@@ -1,16 +1,16 @@
 {
     "Tyres": {
         "FrontRight": {
-            "pressure": 36
+            "pressure": 30
         },
         "FrontLeft": {
-            "pressure": 13
+            "pressure": 31
         },
         "BackRight": {
-            "pressure": 15
+            "pressure": 31
         },
         "BackLeft": {
-            "pressure": 20
+            "pressure": 32
         }
     },
     "SideDoors": {

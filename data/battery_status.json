@@ -1,14 +1,14 @@
 {
     "Battery": {
-        "Voltage": [2.9, 2.1, 2.5, 2.1, 2.1, 2.1, 2.2, 2.2, 2.2, 2.2, 2.1, 2.1, 2.1, 2.1, 2.1, 2.1, 2.2, 2.2, 2.2, 2.2, 2.3, 2.4, 2.5, 2.6],
+        "Voltage": [3.1, 3.2, 3.3, 3.1, 3.2, 3.3, 3.1, 3.2, 3.3, 3.1, 3.2, 3.3, 3.1, 3.2, 3.3, 3.1, 3.2, 3.3, 3.1, 3.2, 3.3, 3.1, 3.2, 3.3],
         "Current": 4.3,
         "SOC": 95,
         "NumberOfCells": 6,
         "CellVoltage": 45,
         "ChargingMOSFET": "OFF",
         "DischargingMOSFET": "OFF",
-        "CellMinimumVoltage": 4.5,
-        "CellMaximumVoltage": 2.8,
+        "CellMinimumVoltage": 2.7,
+        "CellMaximumVoltage": 3.65,
         "Capacity": 60,
         "ErrorStatus": 2,
         "Temperature": 40,

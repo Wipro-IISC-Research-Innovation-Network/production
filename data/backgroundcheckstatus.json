@@ -1,5 +1,26 @@
 {
-  "timestamp": "",
-  "status": "",
-  "checks": {}
-} 
+  "timestamp": "2025-07-09T11:31:26.187Z",
+  "status": "PASS",
+  "checks": {
+    "minCellVoltage": {
+      "value": 3.1,
+      "threshold": ">= 2.7V",
+      "severity": "good"
+    },
+    "maxCellVoltage": {
+      "value": 3.3,
+      "threshold": "<= 3.65V",
+      "severity": "good"
+    },
+    "tyrePressures": {
+      "value": [
+        30,
+        31,
+        31,
+        32
+      ],
+      "threshold": "29-33 PSI",
+      "severity": "good"
+    }
+  }
+}
