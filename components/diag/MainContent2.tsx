@@ -57,8 +57,8 @@ const MainContent: React.FC = () => {
   const motorRPIDOutput1 = 2500;
   const motorRPIDOutput2 = 2500;
   const masterPIDOutput = 350;
-  const currentDrawn = 245;
-  const batteryVoltage = 67;
+  const [currentDrawn, setCurrentDrawn] = useState(0);
+  const [batteryVoltage, setBatteryVoltage] = useState(0);
   const [chargePercentage, setChargePercentage] = useState(0);
   const [temperature, setTemperature] = useState(0);
   const goodCells = 39;
@@ -95,56 +95,52 @@ const MainContent: React.FC = () => {
 
   const updateFunction = async () => {
     try {
-      const response = await fetch('http://0.0.0.0:5002/bms');
-      const data = await response.json()
+      const response = await fetch('/api/status');
+      const data = await response.json();
 
       const battery = data["Battery"];
-      let voltageArray = [];
-      
-      for(let i = 1; i <= 24; ++i) {
-        voltageArray.push(battery[`Voltage_${i}`])
-      }
+      const voltageArray = battery["Voltage"];
 
-      setarrayVoltage(voltageArray)
-      setTemperature(battery["Temperature"])
-      setMosfetChargingState(battery["ChargingMOSFET"])
-      setMosfetDischargingState(battery["DischargingMOSFET"])
-      setmaxVoltage(battery["CellMaximumVoltage"])
-      setminVoltage(battery["CellMinimumVoltage"])
-      setbatteryCapacity(battery["Capacity"])
-      setErrorCode(battery["ErrorStatus"])
-    } catch(e) {  
-      console.log("Fetch error")
-      window.alert("BMS Service encountered an error")
+      setarrayVoltage(voltageArray);
+      setTemperature(battery["Temperature"]);
+      setMosfetChargingState(battery["ChargingMOSFET"]);
+      setMosfetDischargingState(battery["DischargingMOSFET"]);
+      setmaxVoltage(battery["CellMaximumVoltage"]);
+      setminVoltage(battery["CellMinimumVoltage"]);
+      setbatteryCapacity(battery["Capacity"]);
+      setErrorCode(battery["ErrorStatus"]);
+      setChargePercentage(battery["SOC"]);
+      setCurrentDrawn(battery["CurrentDrawn"]);
+      setBatteryVoltage(battery["Est. Battery"]);
+    } catch (e) {
+      console.log("Fetch error", e);
     }
-  }
-
+  };
 
   const controlUnitUpdate = async () => {
      try {
-      const response = await fetch('http://0.0.0.0:5004/lvl2cu')
-    const data = (await response.json())["LEVEL2_CU"];
+      const response = await fetch('')
+      const data = (await response.json())["LEVEL2_CU"];
 
-    for(const unit in data) {
-      const heartbeat = data[unit]["Heartbeat"]
-      if(heartbeat == 0) {
-        window.alert("HEARTBEAT GONE")
+      for(const unit in data) {
+        const heartbeat = data[unit]["Heartbeat"]
+        if(heartbeat == 0) {
+          window.alert("HEARTBEAT GONE")
+        }
       }
+    } catch(e) {
+      console.log("BAD ERROR") 
     }
-  } catch(e) {
-    console.log("BAD ERROR")
-    window.alert("Control Unit 2 has encountered an error!")
-  }
   }
 
   useEffect(() => {
-    const bms = setInterval(updateFunction, 1000)
+    const bms = setInterval(updateFunction, 1000);
     const id = setInterval(controlUnitUpdate, 1000)
     return () => { 
       clearInterval(id)
       clearInterval(bms)
     }
-  })
+  }, []);
 
   const handleSidebar2Click = (category: string) => {
     setActiveSidebar2(category);
@@ -246,7 +242,6 @@ const MainContent: React.FC = () => {
       activeSidebar2 === "Battery" &&
       activeMiniSidebar2 === "Cell Voltages"
     ) {
-
       let avgVoltage: number = 0;
       for(let i = 0; i < arrayVoltage.length; ++i)
         avgVoltage += arrayVoltage[i] / arrayVoltage.length

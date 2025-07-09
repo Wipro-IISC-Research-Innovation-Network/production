@@ -6,41 +6,48 @@ const ExternalLighting: React.FC = () => {
     const [BrakeLightsStatus, setBrakeLightsStatus] = useState('OFF');
     const [TurnSignalsStatus, setTurnSignalsStatus] = useState('OFF');
     const [FogLightsStatus, setFogLightsStatus] = useState('ON');
+    const [error, setError] = useState<string>("");
 
-    useEffect(() =>{
-      console.log("Setting up ExternalLighting hooks")
+    useEffect(() => {
+      const fetchLightingStatus = async () => {
+        try {
+          const response = await fetch('/api/seating?section=ExternalLighting');
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          
+          if (!data.ExternalLighting) {
+            throw new Error('Invalid data structure');
+          }
 
-      const updateFunction = () => {
-        fetch('http://0.0.0.0:5001/ext_lighting')
-          .then(async response => {
-            const data = await response.json()
-            console.log("External Lighing data: ")
-            console.log(data)   
+          const ext = data.ExternalLighting;
+          setHeadlightsStatus(ext.HeadLights.status ? "ON" : "OFF");
+          setTailLightsStatus(ext.TailLights.status ? "ON" : "OFF");
+          setBrakeLightsStatus(ext.BreakLights.status ? "ON" : "OFF");
+          setTurnSignalsStatus(ext.TurnSignals.status ? "ON" : "OFF");
+          setFogLightsStatus(ext.FogLights.status ? "ON" : "OFF");
+          setError("");
+        } catch (error) {
+          console.error('Error fetching external lighting status:', error);
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+          setError(`Failed to fetch data: ${errorMessage}`);
+        }
+      };
 
-            const ext = data["External"]
-            const headlights = ext["HeadLights"]["Status"]
-            const taillights = ext["TailLights"]["Status"]
-            const breaklights = ext["BreakLights"]["Status"]
-            const turnsignals = ext["TurnSignals"]["Status"]
-            const foglights = ext["FogLights"]["Status"]
-            
-            const status = (stat: number) => stat ? "ON" : "OFF"
+      fetchLightingStatus();
+      const interval = setInterval(fetchLightingStatus, 1000);
 
-            setHeadlightsStatus(status(headlights))
-            setTailLightsStatus(status(taillights))
-            setBrakeLightsStatus(status(breaklights))
-            setTurnSignalsStatus(status(turnsignals))
-            setFogLightsStatus(status(foglights))
-        })
-      }
-      const id = setInterval(updateFunction, 1000)
-      return () => clearInterval(id)
-    })
+      return () => clearInterval(interval);
+    }, []);
 
   return (
     <div className="external-lighting-box">
       <h2>External Lighting</h2>
       <br/>
+      {error && <div className="error-message">{error}</div>}
       <div className="lighting-item">
         <span className="lighting-label">Headlights</span>
         <span className="lighting-status">{HeadlightsStatus}</span>

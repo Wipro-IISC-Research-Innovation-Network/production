@@ -1,0 +1,42 @@
+{
+    "CarMode": {
+        "mode": "AMBIENT MODE"
+    },
+    "ByWireSystem": {
+        "steering": {
+            "status": "Close"
+        },
+        "accBrake": {
+            "accPedalStatus": "Open",
+            "brakePedalStatus": "Open"
+        }
+    },
+    "TVSystem": {
+        "stateLevel": {
+            "status": "Off Mode",
+            "operatingLevel": "50%"
+        },
+        "tvStatus": {
+            "state": "State 1"
+        }
+    },
+    "CarDataLevel1": {
+        "speedL": "4000rpm",
+        "speedR": "4000rpm",
+        "steeringAngle": "259",
+        "brakeLevel": "259",
+        "gear": {
+            "status": "FORWARD"
+        },
+        "footSwitch": {
+            "state": "OFF"
+        },
+        "motorBrake": {
+            "state": "ON"
+        }
+    },
+    "CarDataLevel2": {
+        "internalTemp": "23°C",
+        "internalHumidity": "50%"
+    }
+}

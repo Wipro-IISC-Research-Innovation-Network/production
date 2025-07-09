@@ -1,11 +1,45 @@
 // table-lighting.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const TableStatusm: React.FC = () => {
+const TableStatus: React.FC = () => {
   const [TableStatus, setTableStatus] = useState("Open");
-  const [TableLampState, setTableLampState] = useState("ON");
   const [TableHeight, setTableHeight] = useState(40);
+  const [TableLampState, setTableLampState] = useState("ON");
   const [TableLampBrightness, setTableLampBrightness] = useState(40);
+  const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    const fetchTableStatus = async () => {
+      try {
+        const response = await fetch('/api/seating?section=TableStatus');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.TableStatus || !data.TableStatus.table || !data.TableStatus.tableLamp) {
+          throw new Error('Invalid data structure');
+        }
+        
+        setTableStatus(data.TableStatus.table.status);
+        setTableHeight(data.TableStatus.table.height);
+        setTableLampState(data.TableStatus.tableLamp.state);
+        setTableLampBrightness(data.TableStatus.tableLamp.brightness);
+        setError("");
+      } catch (error) {
+        console.error('Error fetching table status:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        setError(`Failed to fetch data: ${errorMessage}`);
+      }
+    };
+
+    fetchTableStatus();
+    const interval = setInterval(fetchTableStatus, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleCaptainSeatPosition = (position: string) => {
     setTableStatus(position);
@@ -17,11 +51,12 @@ const TableStatusm: React.FC = () => {
 
   return (
     <div>
+      {error && <div className="error-message">{error}</div>}
       <div className="table-status-box">
         <h2>Table Status</h2>
         <div className="table-lighting-item">
           <span className="table-lighting-label">
-            Table Status (Open/Close/Opening/Closing/ Error)
+            Table Status (Open/Close/Opening/Closing/Error)
           </span>
           <span className="table-lighting-status">{TableStatus}</span>
         </div>
@@ -61,4 +96,4 @@ const TableStatusm: React.FC = () => {
   );
 };
 
-export default TableStatusm;
+export default TableStatus;

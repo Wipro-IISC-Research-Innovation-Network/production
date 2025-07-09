@@ -1,22 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-interface PIDMasterValuesProps {
-  steeringPIDOutput: number;
-  brakePIDOutput: number;
-  motorRPIDOutput1: number;
-  motorRPIDOutput2: number;
-  masterPIDOutput: number;
-}
+const PIDMasterValues: React.FC = () => {
+  const [steeringPIDOutput, setSteeringPIDOutput] = useState(0);
+  const [brakePIDOutput, setBrakePIDOutput] = useState(0);
+  const [motorRPIDOutput1, setMotorRPIDOutput1] = useState(0);
+  const [motorRPIDOutput2, setMotorRPIDOutput2] = useState(0);
+  const [masterPIDOutput, setMasterPIDOutput] = useState(0);
+  const [error, setError] = useState<string>("");
 
-const PIDMasterValues: React.FC<PIDMasterValuesProps> = ({
-  steeringPIDOutput,
-  brakePIDOutput,
-  motorRPIDOutput1,
-  motorRPIDOutput2,
-  masterPIDOutput,
-}) => {
+  useEffect(() => {
+    const fetchPIDValues = async () => {
+      try {
+        const response = await fetch('/api/vehicle_control?section=PIDMasterValues');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.PIDMasterValues) {
+          throw new Error('Invalid data structure');
+        }
+        
+        setSteeringPIDOutput(data.PIDMasterValues.steeringPID);
+        setBrakePIDOutput(data.PIDMasterValues.brakePID);
+        setMotorRPIDOutput1(data.PIDMasterValues.motorRPID1);
+        setMotorRPIDOutput2(data.PIDMasterValues.motorRPID2);
+        setMasterPIDOutput(data.PIDMasterValues.masterPID);
+        setError("");
+      } catch (error) {
+        console.error('Error fetching PID values:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        setError(`Failed to fetch data: ${errorMessage}`);
+      }
+    };
+
+    fetchPIDValues();
+    const interval = setInterval(fetchPIDValues, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="voltage-current-container">
+      {error && <div className="error-message">{error}</div>}
       <div className="pid-values-container">
         <div className="panel-title">PID Master Values</div>
         <div className="pid-values">

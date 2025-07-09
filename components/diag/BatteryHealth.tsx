@@ -41,7 +41,6 @@ const BatteryHealth: React.FC<BatteryHealthProps> = ({
           <div className="cells-value">
             {poorCells}/{totalCells}
           </div>
-          <div className="cells">cells</div>
         </div>
         <div className="battery-health-line"></div>
       </div>

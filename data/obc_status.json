@@ -1,0 +1,25 @@
+{
+    "OBC": {
+        "ChargeLevel": "Normal",
+        "ACData": {
+            "voltage": "230",
+            "current": "30",
+            "power": "3576"
+        },
+        "DCData": {
+            "voltage": "310",
+            "current": "8.2"
+        },
+        "ChargingTime": "140",
+        "Temperature": {
+            "value": 50,
+            "isGood": true
+        },
+        "ErrorStatus": {
+            "status": "OK",
+            "code": "E001",
+            "date": "2024-04-20",
+            "isWorkingFine": true
+        }
+    }
+}

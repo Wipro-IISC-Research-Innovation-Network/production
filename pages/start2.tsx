@@ -7,7 +7,18 @@ import Footer from '../components/Footer';
 const Start: React.FC = () => {
   const router = useRouter();
 
-  const handleStartClick = () => {
+  const handleStartClick = async () => {
+    try {
+      await fetch('/api/update_mode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ mode: 'PARKED' }),
+      });
+    } catch (err) {
+      console.error('Failed to update mode', err);
+    }
     router.push('/maps-parked'); // Redirect to the "maps" page
   };
 

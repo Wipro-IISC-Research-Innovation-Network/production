@@ -1,0 +1,32 @@
+{
+    "Tyres": {
+        "FrontRight": {
+            "pressure": 36
+        },
+        "FrontLeft": {
+            "pressure": 13
+        },
+        "BackRight": {
+            "pressure": 15
+        },
+        "BackLeft": {
+            "pressure": 20
+        }
+    },
+    "SideDoors": {
+        "LeftDoor": {
+            "status": "Open"
+        },
+        "RightDoor": {
+            "status": "Close"
+        }
+    },
+    "RoofAndBootDoors": {
+        "RoofDoor": {
+            "status": "Close"
+        },
+        "BootDoor": {
+            "status": "Open"
+        }
+    }
+}

@@ -4,8 +4,7 @@ import BatteryVoltageGrid from "./BatteryVoltageGrid";
 interface VoltageCurrentContentProps {
   currentDrawn: number;
   batteryVoltage: number;
-  arrayVoltage:number[];
-  //showGrid: boolean;
+  arrayVoltage: number[];
 }
 
 const VoltageCurrentContent: React.FC<VoltageCurrentContentProps> = ({

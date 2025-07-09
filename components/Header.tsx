@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 const Header: React.FC = () => {
   const [time, setTime] = useState('');
   const [date, setDate] = useState('');
-  const [batteryPercentage, setBatteryPercentage] = useState(85); // Initial battery percentage
-  const [remainingDistance, setRemainingDistance] = useState(204); // Initial remaining distance
-  const [averageWhPerKm, setAverageWhPerKm] = useState(128); // Initial average energy consumption
+  const [batteryPercentage, setBatteryPercentage] = useState(0);
+  const [remainingDistance, setRemainingDistance] = useState(0);
+  const [averageWhPerKm, setAverageWhPerKm] = useState(0);
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -16,39 +16,35 @@ const Header: React.FC = () => {
       const formattedTime = `${hours % 12 || 12}:${minutes < 10 ? `0${minutes}` : minutes} ${ampm}`;
       const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
       const formattedDate = now.toLocaleDateString('en-US', options);
-      
+
       setTime(formattedTime);
       setDate(formattedDate);
     };
 
-    const generateRandomBattery = () => {
-      const randomBattery = Math.floor(Math.random() * 101); // Generate random battery percentage (0-100)
-      setBatteryPercentage(randomBattery);
+    const fetchBatteryData = async () => {
+      try {
+        const res = await fetch('/api/battery_percentage');
+        if (!res.ok) throw new Error('Failed to fetch battery data');
+        const data = await res.json();
+        setBatteryPercentage(data.percentage);
+        setRemainingDistance(data.remainingRangeKm);
+        setAverageWhPerKm(data.avgWhPerKm);
+      } catch (err) {
+        console.error(err);
+      }
     };
 
-    // You can simulate backend updates for remaining distance and energy consumption with this function
-    const updateBackendData = () => {
-      const randomDistance = Math.floor(Math.random() * 300); // Random distance between 0 and 300 km
-      const randomWhPerKm = Math.floor(Math.random() * 200); // Random energy consumption between 0 and 200 Wh/km
-      setRemainingDistance(randomDistance);
-      setAverageWhPerKm(randomWhPerKm);
-    };
-
-    // Update time every second
+    // initial fetch
+    fetchBatteryData();
     updateDateTime();
+
+    // intervals
     const timeIntervalId = setInterval(updateDateTime, 1000);
+    const batteryIntervalId = setInterval(fetchBatteryData, 1000); // poll every 1s
 
-    // Update battery percentage randomly every 5 seconds
-    const batteryIntervalId = setInterval(generateRandomBattery, 1000);
-
-    // Simulate backend data updates every 10 seconds
-    const backendDataIntervalId = setInterval(updateBackendData, 1000);
-
-    // Cleanup intervals when component unmounts
     return () => {
       clearInterval(timeIntervalId);
       clearInterval(batteryIntervalId);
-      clearInterval(backendDataIntervalId);
     };
   }, []);
 

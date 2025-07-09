@@ -1,0 +1,73 @@
+{
+    "LowLevelControls": {
+        "autonomous": "ACTIVE",
+        "manualMode": "DISABLED",
+        "hardwareMode": "ACTIVE"
+    },
+    "PIDMasterValues": {
+        "steeringPID": 73.5,
+        "brakePID": 80.3,
+        "motorRPID1": 55.8,
+        "motorRPID2": 43.2,
+        "masterPID": 54.9
+    },
+    "PIDControls": {
+        "masterControl": "DISABLED",
+        "steeringRack": "ACTIVE",
+        "brake": "DISABLED",
+        "motors": "ENABLED"
+    },
+    "ControlUnit1": {
+        "ECU2ICU": {
+            "heartbeat": "ACTIVE"
+        },
+        "ECU716VHMS": {
+            "heartbeat": "DISABLED"
+        },
+        "ECU8USU": {
+            "heartbeat": "ACTIVE"
+        },
+        "MonitorProcessor": {
+            "status": "PROCESSING"
+        }
+    },
+    "ControlUnit2": {
+        "MPUMotionPlanner": {
+            "status": "ACTIVE"
+        },
+        "ECU1VCU": {
+            "heartbeat": "DISABLED",
+            "activeSoul": "ENABLED"
+        },
+        "ECUXFCU": {
+            "heartbeat": "ACTIVE"
+        },
+        "ECU3DoorECU": {
+            "heartbeat": "ACTIVE",
+            "activeSoul": "ENABLED"
+        },
+        "ECU4RPiOUT": {
+            "heartbeat": "ACTIVE"
+        }
+    },
+    "ControlUnit3": {
+        "ECU5RPiIN": {
+            "heartbeat": "ACTIVE"
+        },
+        "ECU7HVAC": {
+            "heartbeat": "ACTIVE"
+        },
+        "ECU8USU": {
+            "heartbeat": "ACTIVE"
+        },
+        "ECU9LCU": {
+            "heartbeat": "ACTIVE"
+        },
+        "ECU10Dashboard": {
+            "heartbeat": "ACTIVE"
+        },
+        "ECU11Table": {
+            "heartbeat": "ACTIVE"
+        }
+    }
+}

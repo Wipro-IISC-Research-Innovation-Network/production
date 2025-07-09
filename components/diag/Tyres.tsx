@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Tyres: React.FC = () => {
   // State variables for tyre pressure
@@ -6,9 +6,44 @@ const Tyres: React.FC = () => {
   const [frontLeftPressure, setFrontLeftPressure] = useState(45);
   const [backRightPressure, setBackRightPressure] = useState(45);
   const [backLeftPressure, setBackLeftPressure] = useState(45);
+  const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    const fetchTyreStatus = async () => {
+      try {
+        const response = await fetch('/api/doors_and_tyres?section=Tyres');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.Tyres) {
+          throw new Error('Invalid data structure');
+        }
+        
+        setFrontRightPressure(data.Tyres.FrontRight.pressure);
+        setFrontLeftPressure(data.Tyres.FrontLeft.pressure);
+        setBackRightPressure(data.Tyres.BackRight.pressure);
+        setBackLeftPressure(data.Tyres.BackLeft.pressure);
+        setError("");
+      } catch (error) {
+        console.error('Error fetching tyre status:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        setError(`Failed to fetch data: ${errorMessage}`);
+      }
+    };
+
+    fetchTyreStatus();
+    const interval = setInterval(fetchTyreStatus, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="tyres-container">
+      {error && <div className="error-message">{error}</div>}
       {/* Front Right Wheel */}
       <div className="tyre-box front-right">
         <h2>Front Right Wheel</h2>

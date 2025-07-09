@@ -169,6 +169,7 @@
     display: flex;
     justify-content: space-between; /* Distribute space */
     padding: 8px 0; /* Slightly increased padding for spacing */
+    margin-top: 10px;
   }
   
   .status-label {
@@ -283,6 +284,7 @@
     font-size: 20px;
     color: #c0c0c0;
     transform: translate(10%,850%);
+    margin-left: 12px;
   }
 
   .status-value {
@@ -305,7 +307,7 @@
     color: #c0c0c0;
     font-family: 'Urbanist',sans-serif;
     font-size: 20px;
-    margin-right: 60px;
+    margin-right: 20px;
     margin-top: 30px;
   }
   

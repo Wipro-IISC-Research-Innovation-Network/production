@@ -1,0 +1,60 @@
+{
+    "Seating": {
+        "CaptainSeat": {
+            "position": "Back",
+            "backrestPosition": 30
+        },
+        "CoCaptainSeat": {
+            "position": "Side",
+            "backrestPosition": 50
+        }
+    },
+    "InternalLighting": {
+        "roofLight": {
+            "status": "ON",
+            "brightness": 50
+        },
+        "doorPuddle": {
+            "status": "OFF",
+            "brightness": 40
+        },
+        "floorLights": {
+            "status": "ON",
+            "brightness": 50
+        },
+        "dashboardLights": {
+            "status": "OFF",
+            "brightness": 50
+        },
+        "boatLights": {
+            "status": "ON"
+        }
+    },
+    "ExternalLighting": {
+        "HeadLights": {
+            "status": true
+        },
+        "TailLights": {
+            "status": false
+        },
+        "BreakLights": {
+            "status": true
+        },
+        "TurnSignals": {
+            "status": true
+        },
+        "FogLights": {
+            "status": false
+        }
+    },
+    "TableStatus": {
+        "table": {
+            "status": "Close",
+            "height": 60
+        },
+        "tableLamp": {
+            "state": "OFF",
+            "brightness": 90
+        }
+    }
+}
