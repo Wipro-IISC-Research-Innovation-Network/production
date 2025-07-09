@@ -1,6 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 
+// helper to write status file
+const writeStatusFile = (payload) => {
+  try {
+    const filePath = path.join(process.cwd(), 'data', 'backgroundcheckstatus.json');
+    fs.writeFileSync(filePath, JSON.stringify(payload, null, 2));
+  } catch (err) {
+    console.error('Unable to write backgroundcheckstatus.json', err);
+  }
+};
+
 export default function handler(req, res) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET']);
@@ -48,30 +58,65 @@ export default function handler(req, res) {
     const MIN_TPMS_PRESSURE = 29; // PSI
     const MAX_TPMS_PRESSURE = 33; // PSI
 
+    const classify = (value, goodCondition, badCondition) => {
+      if (goodCondition(value)) return 'good';
+      if (badCondition(value)) return 'bad';
+      return 'critical';
+    };
+
     const checks = {
       minCellVoltage: {
         value: minCellVoltage,
-        passed: minCellVoltage >= MIN_CELL_VOLTAGE_THRESHOLD,
         threshold: `>= ${MIN_CELL_VOLTAGE_THRESHOLD}V`,
+        severity: classify(
+          minCellVoltage,
+          (v) => v >= MIN_CELL_VOLTAGE_THRESHOLD,
+          (v) => v >= MIN_CELL_VOLTAGE_THRESHOLD - 0.2,
+        ),
       },
       maxCellVoltage: {
         value: maxCellVoltage,
-        passed: maxCellVoltage <= MAX_CELL_VOLTAGE_THRESHOLD,
         threshold: `<= ${MAX_CELL_VOLTAGE_THRESHOLD}V`,
+        severity: classify(
+          maxCellVoltage,
+          (v) => v <= MAX_CELL_VOLTAGE_THRESHOLD,
+          (v) => v <= MAX_CELL_VOLTAGE_THRESHOLD + 0.2,
+        ),
       },
       tyrePressures: {
         value: tyrePressures,
-        passed: tyrePressures.every((p) => p >= MIN_TPMS_PRESSURE && p <= MAX_TPMS_PRESSURE),
         threshold: `${MIN_TPMS_PRESSURE}-${MAX_TPMS_PRESSURE} PSI`,
+        severity: (() => {
+          // evaluate worst case among tyres
+          let worst = 'good';
+          tyrePressures.forEach((p) => {
+            const s = classify(
+              p,
+              (x) => x >= MIN_TPMS_PRESSURE && x <= MAX_TPMS_PRESSURE,
+              (x) => x >= MIN_TPMS_PRESSURE - 2 && x <= MAX_TPMS_PRESSURE + 2,
+            );
+            if (s === 'critical') worst = 'critical';
+            else if (s === 'bad' && worst === 'good') worst = 'bad';
+          });
+          return worst;
+        })(),
       },
     };
 
-    const overallStatus = Object.values(checks).every((c) => c.passed) ? 'PASS' : 'FAIL';
+    const overallStatus = Object.values(checks).every((c) => c.severity === 'good')
+      ? 'PASS'
+      : 'FAIL';
 
-    return res.status(200).json({
+    const resultPayload = {
+      timestamp: new Date().toISOString(),
       status: overallStatus,
       checks,
-    });
+    };
+
+    // persist status
+    writeStatusFile(resultPayload);
+
+    return res.status(200).json(resultPayload);
   } catch (error) {
     console.error('Error computing background check status:', error);
     return res.status(500).json({
