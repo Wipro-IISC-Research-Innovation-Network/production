@@ -329,11 +329,7 @@ const MainContent: React.FC = () => {
       activeMiniSidebar2 === "Low Level Controls"
     ) {
       return (
-        <LowLevelControls
-          autonomousStatus={autonomousStatus}
-          manualModeStatus={manualModeStatus}
-          hardwareModeStatus={hardwareModeStatus}
-        />
+        <LowLevelControls />
       );
     }
     if (
@@ -341,13 +337,7 @@ const MainContent: React.FC = () => {
       activeMiniSidebar2 === "PID Master Values"
     ) {
       return (
-        <PIDMasterValues
-          steeringPIDOutput={steeringPIDOutput}
-          brakePIDOutput={brakePIDOutput}
-          motorRPIDOutput1={motorRPIDOutput1}
-          motorRPIDOutput2={motorRPIDOutput2}
-          masterPIDOutput={masterPIDOutput}
-        />
+        <PIDMasterValues />
       );
     }
     if (
@@ -355,37 +345,26 @@ const MainContent: React.FC = () => {
       activeMiniSidebar2 === "PID Controls"
     ) {
       return (
-        <PIDControls
-          masterControlStatus={masterControlStatus}
-          steeringRackStatus={steeringRackStatus}
-          brakeStatus={brakeStatus}
-          motorsStatus={motorsStatus}
-        />
+        <PIDControls />
       );
     }
     if (
       activeSidebar2 === "Vehicular Control" &&
       activeMiniSidebar2 === "Control Unit 1"
     ) {
-      return <ControlUnit1 heartbeatStatus={heartbeatStatus} />;
+      return <ControlUnit1 />;
     }
     if (
       activeSidebar2 === "Vehicular Control" &&
       activeMiniSidebar2 === "Control Unit 2"
     ) {
-      return (
-        <ControlUnit2
-          heartbeat1Status={heartbeat1Status}
-          activeStatus={activeStatus}
-          activeSoulStatus={activeSoulStatus}
-        />
-      );
+      return <ControlUnit2 />;
     }
     if (
       activeSidebar2 === "Vehicular Control" &&
       activeMiniSidebar2 === "Control Unit 3"
     ) {
-      return <ControlUnit3 heartbeat2Status={heartbeat2Status} />;
+      return <ControlUnit3 />;
     }
     if (
       activeSidebar2 === "Seating and Lights" &&
@@ -442,11 +421,7 @@ const MainContent: React.FC = () => {
       } } />;
     }
     if(activeSidebar2 === "Car Status" && activeMiniSidebar2 === "Car Data Level 2"){
-      return <CarStatusUI />;
-
-      return <CarModePopup onClose={function (): void {
-        throw new Error("Function not implemented.");
-      } } />;
+      return <CarStatusUI onClose={() => {}} />;
     }
     if(activeSidebar2 === "Car Status" && activeMiniSidebar2 === "ByWire System"){
       return <ByWirePopup onClose={function (): void {
@@ -464,7 +439,7 @@ const MainContent: React.FC = () => {
       } } />;
     }
     if(activeSidebar2 === "Car Status" && activeMiniSidebar2 === "Car Data Level 2"){
-      return <CarStatusUI />;
+      return <CarStatusUI onClose={() => {}} />;
 
     }
     
